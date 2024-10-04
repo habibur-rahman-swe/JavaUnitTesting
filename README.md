@@ -37,5 +37,53 @@ Basic of unit testing
 Repository Lair Unit test [Repository Test Class](https://github.com/habibur-rahman-swe/JavaUnitTesting/blob/spring-boot-app-testing/src/test/java/com/springboot/testing/repository/EmployeeRepositoryTest.java).
 
 ## Testing Service Layer
+-	Create the mock of the dependencies of the service class 
+	``` 
+	import org.mockito.Mock;
+
+	@Mock
+	private EmployeeRepository employeeRepository;
+	```
+
+-	Inject the mock to the service class
+
+	```
+	import org.mockito.InjectMocks;
+
+	@InjectMocks
+	private EmployeeServiceImpl employeeService;
+	```	
+-	Integrat the `mocks` using this annotation to the declaration of the class
+	```
+	import org.junit.jupiter.api.extension.ExtendWith;
+
+	@ExtendWith(MockitoExtension.class)
+	public class EmployeeServiceTests {
+	
+	}
+	```
+
+- A full example of a test
+	```
+	@Test
+	@DisplayName("Juit test for save method")
+	public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployee() throws Exception {
+		// given
+		Employee employee = Employee.builder().id(1l).firstName("A").lastName("B").email("e@email.com").build();
+
+		BDDMockito.given(employeeRepository.findByEmail(employee.getEmail())).willReturn(Optional.empty());
+
+		BDDMockito.given(employeeRepository.save(employee)).willReturn(employee);
+
+		System.out.println(employeeRepository);
+		System.out.println(employeeService);
+		
+		// when
+		Employee savedEmployee = employeeService.save(employee);
+
+		// then
+		assertThat(savedEmployee).isNotNull();
+	}
+	```
 
 

@@ -10,7 +10,7 @@ import com.springboot.testing.model.Employee;
 import com.springboot.testing.repository.EmployeeRepository;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -18,11 +18,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public Employee save(Employee employee) {
 		Optional<Employee> savedEmployee = employeeRepository.findByEmail(employee.getEmail());
-		
+
 		if (savedEmployee.isPresent()) {
 			throw new ResourceNotFoundException("Employee already exist with given email:" + employee.getEmail());
 		}
-		
 
 		return employeeRepository.save(employee);
 	}
